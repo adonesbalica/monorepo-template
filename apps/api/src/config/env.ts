@@ -10,6 +10,10 @@ const envSchema = z.object({
     .enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"])
     .default("info"),
   CORS_ORIGIN: z.string().min(1).default("http://localhost:5173"),
+  DATABASE_URL: z
+    .string()
+    .min(1)
+    .default("postgres://postgres:postgres@localhost:5432/monorepo"),
 });
 
 export type Env = z.infer<typeof envSchema>;

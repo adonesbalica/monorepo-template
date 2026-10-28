@@ -1,7 +1,25 @@
 import { buildApp } from "./app.js";
 import { env } from "./config/env.js";
+import { createDatabase } from "./db/client.js";
+import { runMigrations } from "./db/migrate.js";
 
-const app = await buildApp();
+const connection = createDatabase(env.DATABASE_URL);
+
+try {
+  await runMigrations(connection.db);
+} catch (error) {
+  console.error(
+    "Failed to run database migrations. Is Postgres running? Start it with `pnpm db:up`.",
+  );
+  console.error(error);
+  await connection.close();
+  process.exit(1);
+}
+
+const app = await buildApp({
+  db: connection.db,
+  closeDatabase: connection.close,
+});
 
 async function shutdown(signal: NodeJS.Signals): Promise<void> {
   app.log.info({ signal }, "received shutdown signal");
