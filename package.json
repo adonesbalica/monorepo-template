@@ -2,6 +2,7 @@
   "name": "monorepo-template",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "description": "TypeScript monorepo with a React frontend and a Fastify API.",
   "packageManager": "pnpm@12.15.0",
   "engines": {
