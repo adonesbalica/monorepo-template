@@ -1,0 +1,34 @@
+{
+  "name": "monorepo-template",
+  "version": "0.1.0",
+  "private": true,
+  "description": "TypeScript monorepo with a React frontend and a Fastify API.",
+  "packageManager": "pnpm@12.15.0",
+  "engines": {
+    "node": ">=22.12.0",
+    "pnpm": ">=10.0.0"
+  },
+  "scripts": {
+    "dev": "pnpm build:shared && pnpm --parallel --filter @repo/api --filter @repo/web dev",
+    "build": "pnpm build:shared && pnpm --parallel --filter @repo/api --filter @repo/web build",
+    "build:shared": "pnpm --filter @repo/shared build",
+    "start": "pnpm --filter @repo/api start",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "pnpm build:shared && pnpm -r typecheck",
+    "test": "pnpm build:shared && pnpm -r --if-present test",
+    "test:watch": "pnpm --parallel --filter @repo/api --filter @repo/web test:watch"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.13.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "globals": "^17.13.0",
+    "prettier": "^3.9.10",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.72.1"
+  }
+}
