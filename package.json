@@ -11,6 +11,8 @@
   },
   "scripts": {
     "dev": "pnpm build:shared && pnpm --parallel --filter @repo/api --filter @repo/web dev",
+    "dev:api": "pnpm build:shared && pnpm --filter @repo/api dev",
+    "dev:web": "pnpm build:shared && pnpm --filter @repo/web dev",
     "build": "pnpm build:shared && pnpm --parallel --filter @repo/api --filter @repo/web build",
     "build:shared": "pnpm --filter @repo/shared build",
     "start": "pnpm --filter @repo/api start",
