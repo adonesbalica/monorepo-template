@@ -199,6 +199,10 @@ There is no `add` type in Conventional Commits. Use `feat` for new behavior and
 
 ## Troubleshooting
 
+- **PowerShell blocks `pnpm` on Windows:** if `pnpm` fails with "running scripts
+  is disabled", use `pnpm.cmd` (for example, `pnpm.cmd dev`) or run the commands
+  in Command Prompt. Alternatively, allow local scripts for your user with
+  `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`.
 - **Port already in use:** both dev servers use strict ports (`3000` and
   `5173`). Stop the process holding the port or change it in the env file.
 - **Blocked install scripts:** pnpm approves build scripts explicitly. `esbuild`
