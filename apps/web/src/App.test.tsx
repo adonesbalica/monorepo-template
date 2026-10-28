@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import type { HealthResponse } from "@repo/shared";
+import { MemoryRouter } from "react-router-dom";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import App from "./App";
 
@@ -18,6 +19,14 @@ function jsonResponse(body: unknown, status = 200) {
   });
 }
 
+function renderApp(initialEntries: string[] = ["/"]) {
+  return render(
+    <MemoryRouter initialEntries={initialEntries}>
+      <App />
+    </MemoryRouter>,
+  );
+}
+
 describe("App", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
@@ -27,7 +36,7 @@ describe("App", () => {
     const fetchMock = vi.fn().mockResolvedValue(jsonResponse(health));
     vi.stubGlobal("fetch", fetchMock);
 
-    render(<App />);
+    renderApp();
 
     expect(await screen.findByText("Operational")).toBeInTheDocument();
     expect(screen.getByText("api")).toBeInTheDocument();
@@ -45,7 +54,7 @@ describe("App", () => {
       vi.fn().mockRejectedValue(new Error("Network down")),
     );
 
-    render(<App />);
+    renderApp();
 
     expect(await screen.findByText("API unreachable")).toBeInTheDocument();
     expect(screen.getByText("Network down")).toBeInTheDocument();
@@ -57,7 +66,7 @@ describe("App", () => {
       vi.fn().mockResolvedValue(jsonResponse({ message: "nope" }, 503)),
     );
 
-    render(<App />);
+    renderApp();
 
     expect(await screen.findByText("API unreachable")).toBeInTheDocument();
     expect(
@@ -72,12 +81,43 @@ describe("App", () => {
       .mockResolvedValueOnce(jsonResponse({ ...health, uptime: 99 }));
     vi.stubGlobal("fetch", fetchMock);
 
-    render(<App />);
+    renderApp();
 
     await screen.findByText("Operational");
     fireEvent.click(screen.getByRole("button", { name: "Refresh" }));
 
     expect(await screen.findByText("99s")).toBeInTheDocument();
     expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("navigates between the status and about pages", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockImplementation(async () => jsonResponse(health)),
+    );
+
+    renderApp();
+
+    expect(await screen.findByText("Operational")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("link", { name: "About" }));
+
+    expect(
+      await screen.findByRole("heading", {
+        name: "A monorepo with clear boundaries.",
+      }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("link", { name: "Status" }));
+
+    expect(await screen.findByText("Operational")).toBeInTheDocument();
+  });
+
+  it("renders a not found page for unknown routes", () => {
+    renderApp(["/missing"]);
+
+    expect(
+      screen.getByRole("heading", { name: "Page not found." }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("/missing")).toBeInTheDocument();
   });
 });
