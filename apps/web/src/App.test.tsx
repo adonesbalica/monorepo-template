@@ -40,7 +40,10 @@ describe("App", () => {
   });
 
   it("shows the api error message when the request fails", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("Network down")));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockRejectedValue(new Error("Network down")),
+    );
 
     render(<App />);
 

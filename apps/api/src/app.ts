@@ -1,8 +1,5 @@
 import cors from "@fastify/cors";
-import Fastify, {
-  type FastifyError,
-  type FastifyInstance,
-} from "fastify";
+import Fastify, { type FastifyError, type FastifyInstance } from "fastify";
 import { API_ROUTES, type ApiError } from "@repo/shared";
 import { env } from "./config/env.js";
 import { API_PREFIX, SERVICE_NAME, SERVICE_VERSION } from "./config/service.js";
