@@ -22,7 +22,13 @@
     "format:check": "prettier --check .",
     "typecheck": "pnpm build:shared && pnpm -r typecheck",
     "test": "pnpm build:shared && pnpm -r --if-present test",
-    "test:watch": "pnpm --parallel --filter @repo/api --filter @repo/web test:watch"
+    "test:watch": "pnpm --parallel --filter @repo/api --filter @repo/web test:watch",
+    "db:up": "docker compose up -d --wait postgres",
+    "db:down": "docker compose down",
+    "db:reset": "docker compose down -v && docker compose up -d --wait postgres",
+    "db:generate": "pnpm --filter @repo/api db:generate",
+    "db:migrate": "pnpm --filter @repo/api db:migrate",
+    "db:studio": "pnpm --filter @repo/api db:studio"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

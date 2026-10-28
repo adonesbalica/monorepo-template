@@ -21,6 +21,11 @@ pnpm-debug.log*
 .eslintcache
 .turbo/
 
+# Local database files
+*.db
+*.db-journal
+*.sqlite
+
 # Editors and operating systems
 .DS_Store
 Thumbs.db
