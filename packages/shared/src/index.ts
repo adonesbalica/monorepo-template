@@ -5,6 +5,7 @@
 
 export const API_ROUTES = {
   health: "/health",
+  tasks: "/tasks",
 } as const;
 
 export type ApiRoute = (typeof API_ROUTES)[keyof typeof API_ROUTES];
@@ -23,4 +24,25 @@ export interface ApiError {
   statusCode: number;
   error: string;
   message: string;
+}
+
+export interface Task {
+  id: string;
+  title: string;
+  description: string | null;
+  completed: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateTaskInput {
+  title: string;
+  description?: string | null;
+  completed?: boolean;
+}
+
+export interface UpdateTaskInput {
+  title?: string;
+  description?: string | null;
+  completed?: boolean;
 }
